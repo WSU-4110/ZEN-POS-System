@@ -1,29 +1,39 @@
+
 CREATE DATABASE zenpos;
+
 CREATE TABLE employees (
   id SERIAL PRIMARY KEY,
   username VARCHAR(50) UNIQUE NOT NULL,
   password_hash TEXT NOT NULL,
-  role VARCHAR(20) CHECK (role IN ('cashier', 'manager', 'admin'));
+  role VARCHAR(20) CHECK (role IN ('cashier', 'manager', 'admin')),
   status VARCHAR(20) DEFAULT 'active'
 );
+
 INSERT INTO employees (username, password_hash, role, status) VALUES
   ('cashier1', '5e884898da28047151d0e56f8dc62927', 'cashier', 'active'),
   ('manager1', '6b3a55e0261b0304143f805a24949bb6', 'manager', 'active');
+
+
 CREATE TABLE customers (
-   id SERIAL PRIMARY KEY,
-   phone_number VARCHAR(20) UNIQUE NOT NULL,
-   reward_points INTEGER DEFAULT 0
+  id SERIAL PRIMARY KEY,
+  phone_number VARCHAR(20) UNIQUE NOT NULL,
+  reward_points INTEGER DEFAULT 0,
+  joined_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 INSERT INTO customers (phone_number, reward_points) VALUES
-    ('3477850563', 100),
-    ('3139844434', 50);
+  ('3477850563', 100),
+  ('3139844434', 50);
+
 
 CREATE TABLE departments (
-   id SERIAL PRIMARY KEY,
-   name VARCHAR(50) NOT NULL
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(50) NOT NULL
 );
+
 INSERT INTO departments (name) VALUES
-   ('Produce'), ('Dairy'), ('Household'), ('Bakery'), ('Restaurant');
+  ('Produce'), ('Dairy'), ('Household'), ('Bakery'), ('Restaurant');
+
 
 CREATE TABLE items (
   id SERIAL PRIMARY KEY,
@@ -32,14 +42,18 @@ CREATE TABLE items (
   price DECIMAL(6,2) NOT NULL,
   stock INTEGER DEFAULT 0,
   department_id INTEGER REFERENCES departments(id),
-  modifiable BOOLEAN DEFAULT FALSE
+  modifiable BOOLEAN DEFAULT FALSE,
+  subcategory VARCHAR(50),
+  restock_threshold INT DEFAULT 10
 );
-INSERT INTO items (name, sku, price, stock, department_id, modifiable) VALUES
-  ('Bananas (lb)', 'PRD001', 0.59, 100, 1, FALSE),
-  ('Milk 1 Gallon', 'DRY001', 3.49, 50, 2, FALSE),
-  ('Laundry Detergent', 'HHD001', 7.99, 30, 3, FALSE),
-  ('Chocolate Muffin', 'BAK001', 2.50, 40, 4, FALSE),
-  ('Burger Combo Meal', 'RES001', 9.99, 25, 5, TRUE);
+
+INSERT INTO items (name, sku, price, stock, department_id, modifiable, subcategory) VALUES
+  ('Bananas (lb)', 'PRD001', 0.59, 100, 1, FALSE, 'Fruits'),
+  ('Milk 1 Gallon', 'DRY001', 3.49, 50, 2, FALSE, 'Milk'),
+  ('Laundry Detergent', 'HHD001', 7.99, 30, 3, FALSE, 'Cleaning'),
+  ('Chocolate Muffin', 'BAK001', 2.50, 40, 4, FALSE, 'Muffins'),
+  ('Burger Combo Meal', 'RES001', 9.99, 25, 5, TRUE, 'Combo Meals');
+
 
 CREATE TABLE transactions (
   id SERIAL PRIMARY KEY,
@@ -48,16 +62,19 @@ CREATE TABLE transactions (
   total_amount DECIMAL(8,2),
   timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 INSERT INTO transactions (employee_id, customer_id, total_amount) VALUES
-    (1, 1, 13.08);
+  (1, 1, 13.08);
+
 
 CREATE TABLE transaction_items (
-   id SERIAL PRIMARY KEY,
-   transaction_id INTEGER REFERENCES transactions(id),
-   item_id INTEGER REFERENCES items(id),
-   quantity INTEGER,
-   price DECIMAL(6,2)
+  id SERIAL PRIMARY KEY,
+  transaction_id INTEGER REFERENCES transactions(id),
+  item_id INTEGER REFERENCES items(id),
+  quantity INTEGER,
+  price DECIMAL(6,2)
 );
 
 INSERT INTO transaction_items (transaction_id, item_id, quantity, price) VALUES
-  (1, 1, 2, 1.18),(1, 5, 1, 9.99);
+  (1, 1, 2, 1.18),
+  (1, 5, 1, 9.99);
