@@ -1,4 +1,3 @@
-// backend/src/main/java/com/zenpos/controller/CartController.java
 package com.zenpos.controller;
 
 import com.zenpos.dto.CartCustomRequest;
@@ -23,13 +22,12 @@ public class CartController {
         this.cartService = cartService;
     }
 
-    /** GET /api/cart?user={user} */
+
     @GetMapping
     public List<CartEntry> getCart(@RequestParam String user) {
         return cartService.getCart(user);
     }
 
-    /** POST /api/cart/add?user={user}&itemId={itemId} */
     @PostMapping("/add")
     public ResponseEntity<Void> addItem(
             @RequestParam String user,
@@ -39,9 +37,7 @@ public class CartController {
         return ResponseEntity.ok().build();
     }
 
-    /** POST /api/cart/addCustom?user={user}
-     *   body: { "name": "...", "price": 12.34, "quantity": 2 }
-     */
+
     @PostMapping("/addCustom")
     public ResponseEntity<Void> addCustom(
             @RequestParam String user,
@@ -51,7 +47,6 @@ public class CartController {
         return ResponseEntity.ok().build();
     }
 
-    /** DELETE /api/cart?user={user}&index={index} */
     @DeleteMapping
     public ResponseEntity<Void> removeItem(
             @RequestParam String user,
@@ -61,7 +56,6 @@ public class CartController {
         return ResponseEntity.ok().build();
     }
 
-    /** POST /api/cart/clear?user={user} */
     @PostMapping("/clear")
     public ResponseEntity<Void> clearCart(@RequestParam String user) {
         cartService.getCart(user).clear();
