@@ -1,4 +1,3 @@
-// backend/src/main/java/com/zenpos/ZenposApplication.java
 package com.zenpos;
 
 import org.springframework.boot.SpringApplication;

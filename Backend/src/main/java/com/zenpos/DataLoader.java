@@ -52,7 +52,6 @@ public class DataLoader implements CommandLineRunner {
             itemRepo.save(new Item("Milk",  1.49,  50, dairy));
         }
 
-        // only insert Restaurant if it doesn't exist yet
         if (!deptRepo.existsByName("Restaurant")) {
             Department restaurant = new Department();
             restaurant.setName("Restaurant");
