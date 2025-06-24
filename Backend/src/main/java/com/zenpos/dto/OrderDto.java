@@ -4,5 +4,10 @@ import java.util.List;
 
 public record OrderDto(
         List<CartItemDto> items,
-        double total
-) {}
+        double total,
+        boolean promotional
+) {
+    public double getTotalAmount() {
+        return 0;
+    }
+}
