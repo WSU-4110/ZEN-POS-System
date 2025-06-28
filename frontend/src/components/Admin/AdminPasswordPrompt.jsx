@@ -1,44 +1,56 @@
-const handleAdminLogin = async () => {
-  const { value: password } = await Swal.fire({
-    title: 'Admin Authentication',
-    text: 'Enter administrator credentials to proceed',
-    icon: 'shield',
-    customClass: 'admin-password-popup',
-    input: 'password',
-    inputPlaceholder: 'Enter your password...',
-    inputAttributes: {
-      'autocomplete': 'current-password',
-      'aria-label': 'Enter administrator password'
-    },
-    showCancelButton: true,
-    confirmButtonText: 'Authenticate',
-    cancelButtonText: 'Cancel',
-    allowOutsideClick: false,
-    backdrop: 'rgba(0,0,0,0.7)',
-    preConfirm: (value) => {
-      if (!value) {
-        Swal.showValidationMessage('Password is required');
-      }
-      return value;
-    }
-  });
+import React from 'react';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
-  if (password === 'admin123') {
-    Swal.fire({
-      icon: 'success',
-      title: 'Access Granted',
-      timer: 1500,
-      showConfirmButton: false,
-      toast: true,
-      position: 'top-end'
+export default function AdminPasswordPrompt() {
+  const navigate = useNavigate();
+
+  const handleAdminLogin = async () => {
+    const { value: formValues } = await Swal.fire({
+      title: 'Admin Login',
+      html:
+          '<input id="swal-username" class="swal2-input" placeholder="Username">' +
+          '<input id="swal-password" type="password" class="swal2-input" placeholder="Password">',
+      focusConfirm: false,
+      showCancelButton: true,
+      confirmButtonText: 'Login',
+      preConfirm: () => {
+        const username = document.getElementById('swal-username').value;
+        const password = document.getElementById('swal-password').value;
+        if (!username || !password) {
+          Swal.showValidationMessage('Please enter both username and password');
+          return false;
+        }
+        return { username, password };
+      }
     });
-    navigate('/manager');
-  } else if (password) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Access Denied',
-      text: 'Incorrect password',
-      confirmButtonText: 'Try Again'
-    });
-  }
-};
+
+    if (!formValues) return;
+
+    try {
+      const res = await fetch('http://localhost:8080/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formValues)
+      });
+
+      const result = await res.json();
+
+      if (res.ok && result.status === 'success') {
+        localStorage.setItem('isAdmin', 'true');
+        Swal.fire('Success', 'Admin login successful', 'success');
+        navigate('/manager');
+      } else {
+        Swal.fire('Access Denied', result.error || 'Invalid credentials', 'error');
+      }
+    } catch (err) {
+      Swal.fire('Error', 'Unable to contact server or invalid credentials', 'error');
+    }
+  };
+
+  return (
+      <button onClick={handleAdminLogin} className="btn btn-warning">
+        Admin Login
+      </button>
+  );
+}

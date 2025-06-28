@@ -1,4 +1,3 @@
-// backend/src/main/java/com/zenpos/entity/CartEntry.java
 package com.zenpos.entity;
 
 public class CartEntry {
@@ -14,7 +13,6 @@ public class CartEntry {
         this.quantity = quantity;
     }
 
-    // getters & setters
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public Double getPrice() { return price; }

@@ -1,5 +1,7 @@
 import React from 'react';
 import '../index.css';
+import api from '../api/api';
+
 
 export default function RewardsScreen() {
   return (

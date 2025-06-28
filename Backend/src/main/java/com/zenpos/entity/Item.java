@@ -1,4 +1,4 @@
-// Item.java
+
 package com.zenpos.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -20,7 +20,7 @@ public class Item {
     @Column(nullable = false)
     private Integer stock;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
