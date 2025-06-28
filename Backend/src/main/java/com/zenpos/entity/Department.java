@@ -1,4 +1,4 @@
-// Department.java
+
 package com.zenpos.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
