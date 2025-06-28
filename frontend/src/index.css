@@ -61,3 +61,83 @@ a { text-decoration: none; }
   color: #fff;
   font-weight: 600;
 }
+
+.nav-item {
+  margin: 0 12px;
+}
+
+.nav-link {
+  padding: 8px 15px !important;
+  margin: 0 5px;
+}
+
+/* SweetAlert Custom Styles */
+.swal2-popup {
+  border-radius: 10px !important;
+  padding: 2rem !important;
+  font-family: inherit !important;
+}
+
+.swal2-title {
+  color: #2c3e50 !important;
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.swal2-input, .swal2-select {
+  border: 1px solid #ddd !important;
+  border-radius: 5px !important;
+  padding: 0.75rem 1rem !important;
+  font-size: 1rem !important;
+  margin: 0.5rem auto !important;
+  width: 90% !important;
+  box-shadow: none !important;
+}
+
+.swal2-input:focus, .swal2-select:focus {
+  border-color: #3498db !important;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2) !important;
+}
+
+.swal2-confirm {
+  background-color: #2980b9 !important;
+  border: none !important;
+  padding: 0.75rem 2rem !important;
+  border-radius: 5px !important;
+  font-size: 1rem !important;
+  transition: all 0.2s !important;
+}
+
+.swal2-confirm:hover {
+  background-color: #3498db !important;
+  transform: translateY(-1px) !important;
+}
+
+.swal2-cancel {
+  background-color: #8b8484 !important;
+  border: none !important;
+  padding: 0.75rem 2rem !important;
+  border-radius: 5px !important;
+  font-size: 1rem !important;
+  transition: all 0.2s !important;
+}
+
+.swal2-cancel:hover {
+  background-color: #8b8484 !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Special styles for admin password prompt */
+.admin-password-popup .swal2-input {
+  letter-spacing: 0.2em;
+  font-family: monospace;
+  text-align: center;
+  padding: 1rem !important;
+  font-size: 1.2rem !important;
+}
+
+.admin-password-popup .swal2-title {
+  color: #2c3e50 !important;
+  margin-bottom: 1rem !important;
+}
