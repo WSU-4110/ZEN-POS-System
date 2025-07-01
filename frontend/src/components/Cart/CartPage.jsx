@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/api';
+import './DepartmentPage.css'
 
 export default function CartPage() {
   const [entries, setEntries] = useState([]);

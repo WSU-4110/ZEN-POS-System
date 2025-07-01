@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/api';
+<<<<<<< Updated upstream
 import '../index.css';
+=======
+import '../LoginScreen.css';
+import { useAuth } from '../context/AuthContext'; // ✅ ADD THIS LINE
+>>>>>>> Stashed changes
 
 export default function LoginScreen() {
   const [username, setUsername] = useState('');

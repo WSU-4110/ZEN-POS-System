@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+<<<<<<< Updated upstream
 import './index.css';
 import Swal from 'sweetalert2';
 import api from './api/api';
+=======
+import LogoutButton from './components/LogoutButton';
+
+>>>>>>> Stashed changes
 import { CartProvider } from './CartContext';
 
 import LoginScreen from './components/LoginScreen';

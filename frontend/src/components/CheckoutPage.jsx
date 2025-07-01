@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/api';
+<<<<<<< Updated upstream
 import '../index.css';
+=======
+import { useAuth } from '../context/AuthContext';
+import '../CheckouPage.css';
+>>>>>>> Stashed changes
 
 export default function CheckoutPage() {
   const [cart, setCart]   = useState([]);
