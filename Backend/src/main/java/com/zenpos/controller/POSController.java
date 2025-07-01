@@ -2,10 +2,12 @@ package com.zenpos.controller;
 
 import com.zenpos.entity.Employee;
 import com.zenpos.repository.EmployeeRepository;
+import com.zenpos.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -14,10 +16,12 @@ import java.util.Optional;
 public class POSController {
 
     private final EmployeeRepository empRepo;
+    private final ItemRepository itemRepository;
 
     @Autowired
-    public POSController(EmployeeRepository empRepo) {
+    public POSController(EmployeeRepository empRepo, ItemRepository itemRepository) {
         this.empRepo = empRepo;
+        this.itemRepository = itemRepository;
     }
 
     @PostMapping("/login")
@@ -49,4 +53,5 @@ public class POSController {
             this.password = password;
         }
     }
+
 }
