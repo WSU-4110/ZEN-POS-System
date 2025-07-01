@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import "./Department.css"
 
 const DEPARTMENTS = [
   { id: 1, name: 'Produce' },
