@@ -1,8 +1,13 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
+import LogoutButton from './components/LogoutButton';
+
 import { CartProvider } from './CartContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import ReceiptPage from './components/ReceiptPage';
+
 import DepartmentList from './components/Departments/DepartmentList';
 import ItemList from './components/ItemList';
 import CartPage from './components/Cart/CartPage';
@@ -11,7 +16,10 @@ import LoginScreen from './components/LoginScreen';
 import ManagerDashboard from './components/Admin/AdminDashboard';
 import AdminPasswordPrompt from './components/Admin/AdminPasswordPrompt';
 
-export default function App() {
+function InnerApp() {
+    const { user } = useAuth();
+    const isLoggedIn = !!user;
+
     return (
         <CartProvider>
             <BrowserRouter>
@@ -20,30 +28,31 @@ export default function App() {
                         <Link to="/" className="text-white text-decoration-none">
                             <h1 className="h4 m-0">ZEN POS System</h1>
                         </Link>
-                        <nav>
-                            <ul className="nav">
-                                <li className="nav-item">
-                                    <Link to="/departments" className="nav-link text-white px-2">
-                                        Departments
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link to="/checkout" className="nav-link text-white px-2">
-                                        🛒 Cart
-                                    </Link>
-                                </li>
-                            </ul>
-                        </nav>
+                        {isLoggedIn && (
+                            <nav className="d-flex align-items-center">
+                                <ul className="nav mb-0">
+                                    <li className="nav-item">
+                                        <Link to="/departments" className="nav-link text-white px-2">Departments</Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link to="/checkout" className="nav-link text-white px-2">🛒 Cart</Link>
+                                    </li>
+                                </ul>
+                                <LogoutButton />
+                            </nav>
+                        )}
                     </div>
                 </header>
 
                 <main className="container my-4">
                     <Routes>
                         <Route path="/" element={<LoginScreen />} />
-                        <Route path="/departments" element={<DepartmentList />} />
-                        <Route path="/departments/:id/items" element={<ItemList />} />
-                        <Route path="/checkout" element={<CartPage />} />
-                        <Route path="/rewards" element={<RewardsScreen />} />
+                        <Route path="/login" element={<LoginScreen />} />
+                        <Route path="/rewards" element={isLoggedIn ? <RewardsScreen /> : <Navigate to="/" />} />
+                        <Route path="/departments" element={isLoggedIn ? <DepartmentList /> : <Navigate to="/" />} />
+                        <Route path="/departments/:id/items" element={isLoggedIn ? <ItemList /> : <Navigate to="/" />} />
+                        <Route path="/checkout" element={isLoggedIn ? <CartPage /> : <Navigate to="/" />} />
+                        <Route path="/receipt" element={isLoggedIn ? <ReceiptPage /> : <Navigate to="/" />} />
                         <Route path="/manager" element={<ManagerDashboard />} />
                         <Route path="*" element={<p>Page not found</p>} />
                     </Routes>
@@ -56,3 +65,13 @@ export default function App() {
         </CartProvider>
     );
 }
+
+export default function App() {
+    return (
+        <AuthProvider>
+            <InnerApp />
+        </AuthProvider>
+    );
+
+}
+

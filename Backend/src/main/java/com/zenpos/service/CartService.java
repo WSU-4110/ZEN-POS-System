@@ -1,4 +1,3 @@
-// backend/src/main/java/com/zenpos/service/CartService.java
 package com.zenpos.service;
 
 import com.zenpos.entity.CartEntry;
@@ -12,7 +11,6 @@ import java.util.*;
 @Service
 public class CartService {
     private final ItemRepository itemRepo;
-    // in-memory carts keyed by user
     private final Map<String, List<CartEntry>> carts = new HashMap<>();
 
     @Autowired

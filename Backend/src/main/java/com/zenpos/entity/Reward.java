@@ -1,4 +1,3 @@
-// Reward.java
 package com.zenpos.entity;
 
 import jakarta.persistence.*;

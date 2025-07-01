@@ -1,4 +1,3 @@
-// backend/src/main/java/com/zenpos/dto/CartCustomRequest.java
 package com.zenpos.dto;
 
 public class CartCustomRequest {
