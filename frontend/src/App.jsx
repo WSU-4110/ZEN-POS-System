@@ -5,7 +5,7 @@ import './index.css';
 import LogoutButton from './components/LogoutButton';
 
 import { CartProvider } from './CartContext';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { AuthProvider, useAuth } from './components/context/AuthContext';
 import ReceiptPage from './components/ReceiptPage';
 
 import DepartmentList from './components/Departments/DepartmentList';

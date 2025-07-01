@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 import './AdminDashboard.css';
 import '../../index.css';
 import { useCart } from '../../CartContext';
-import api from '../../api/api';
+import api from '../api/api';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
