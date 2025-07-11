@@ -2,8 +2,8 @@ import React from 'react';
 
 export default function DailyReportPage() {
   const dailySales = 123;
-  const revenue = 456.78; // Replace with real data
-  const mostSoldItem = 'Banana'; // Replace with real data
+  const revenue = 456.78;
+  const mostSoldItem = 'Banana';
 
   return (
     <div className="container mt-4">
