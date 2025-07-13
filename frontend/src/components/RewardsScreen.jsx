@@ -14,11 +14,15 @@ export default function RewardsScreen() {
 
         try {
             await api.post('/rewards/enroll', { phoneNumber: phone });
-            localStorage.setItem('phoneNumber', phone); // save for later (like receipt lookup)
-            navigate('/departments');
+            localStorage.setItem('phoneNumber', phone); 
+            navigate('/departments'); 
         } catch {
             setError('Failed to enroll. Try again.');
         }
+    };
+
+    const handleSkip = () => {
+        navigate('/itemList'); 
     };
 
     return (
@@ -37,10 +41,14 @@ export default function RewardsScreen() {
                     placeholder="Phone Number"
                     required
                 />
-                <button className="btn btn-success w-100" type="submit">
+                <button className="btn btn-success w-100 mb-2" type="submit">
                     Continue
                 </button>
             </form>
+
+            <button className="btn btn-secondary w-100" onClick={handleSkip}>
+                Skip
+            </button>
         </div>
     );
 }
