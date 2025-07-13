@@ -22,7 +22,7 @@ export default function RewardsScreen() {
     };
 
     const handleSkip = () => {
-        navigate('/itemList'); // navigate to add-to-cart screen
+        navigate('/itemList');
     };
 
     return (

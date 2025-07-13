@@ -11,9 +11,18 @@ export default function LogoutButton() {
         navigate('/');
     };
 
+    const handleGoToReport = () => {
+        navigate('/report');
+    };
+
     return (
-        <button onClick={handleLogout} className="btn btn-outline-light btn-sm ms-3">
-            Logout
-        </button>
+        <div className="d-flex gap-2">
+            <button onClick={handleLogout} className="btn btn-outline-light btn-sm ms-3">
+                Logout
+            </button>
+            <button onClick={handleGoToReport} className="btn btn-outline-info btn-sm">
+                View Report
+            </button>
+        </div>
     );
 }
