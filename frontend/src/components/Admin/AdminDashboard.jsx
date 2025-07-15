@@ -5,6 +5,8 @@ import './AdminDashboard.css';
 import '../../index.css';
 import { useCart } from '../../CartContext';
 import api from '../api/api';
+import EmployeeManagement from './EmployeeManagement';
+import TransactionHistory from './TransactionHistory';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -14,15 +16,27 @@ export default function AdminDashboard() {
     { id: 2, name: 'Custom Burger', category: 'Restaurant', quantity: 12, lowStock: false },
     { id: 3, name: 'Apple', category: 'Produce', quantity: 3, lowStock: true },
   ]);
-
+  const [transactions, setTransactions] = useState([]);
   const { applyDiscount, removeDiscount, discount } = useCart();
 
   useEffect(() => {
     const isAdmin = localStorage.getItem('isAdmin');
     if (isAdmin !== 'true') {
       navigate('/');
+    } else {
+      fetchTransactions();
     }
   }, [navigate]);
+
+  const fetchTransactions = async () => {
+    try {
+      // Replace with your actual API call
+      const response = await api.get('/transactions');
+      setTransactions(response.data);
+    } catch (error) {
+      Swal.fire('Error', 'Failed to fetch transactions', 'error');
+    }
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('isAdmin');
@@ -202,9 +216,15 @@ export default function AdminDashboard() {
         <div className="admin-header">
           <h2>Admin Dashboard</h2>
           <div className="admin-tabs">
-            <button className={`tab-btn ${activeTab === 'inventory' ? 'active' : ''}`} onClick={() => setActiveTab('inventory')}>Inventory</button>
-            <button className={`tab-btn ${activeTab === 'reports' ? 'active' : ''}`} onClick={() => setActiveTab('reports')}>Reports</button>
-            <button className={`tab-btn ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => setActiveTab('settings')}>Settings</button>
+            <button className={`tab-btn ${activeTab === 'inventory' ? 'active' : ''}`} onClick={() => setActiveTab('inventory')}>
+              Inventory
+            </button>
+            <button className={`tab-btn ${activeTab === 'employees' ? 'active' : ''}`} onClick={() => setActiveTab('employees')}>
+              Employees
+            </button>
+            <button className={`tab-btn ${activeTab === 'transactions' ? 'active' : ''}`} onClick={() => setActiveTab('transactions')}>
+              Transaction History
+            </button>
           </div>
         </div>
 
@@ -218,7 +238,6 @@ export default function AdminDashboard() {
               </div>
           )}
         </div>
-
 
         {activeTab === 'inventory' && (
             <div className="inventory-management">
@@ -265,22 +284,15 @@ export default function AdminDashboard() {
             </div>
         )}
 
-        {activeTab === 'reports' && (
-            <div className="reports-section">
-              <h4>Sales Reports</h4>
-              <div className="card p-4">
-                <p>Coming soon: Daily, weekly, and monthly sales reports</p>
-              </div>
-            </div>
+        {activeTab === 'employees' && (
+            <EmployeeManagement />
         )}
 
-        {activeTab === 'settings' && (
-            <div className="settings-section">
-              <h4>System Settings</h4>
-              <div className="card p-4">
-                <p>Coming soon: POS configuration options</p>
-              </div>
-            </div>
+        {activeTab === 'transactions' && (
+            <TransactionHistory
+                transactions={transactions}
+                onRefresh={fetchTransactions}
+            />
         )}
       </div>
   );
