@@ -15,6 +15,7 @@ import RewardsScreen from './components/RewardsScreen';
 import LoginScreen from './components/LoginScreen';
 import ManagerDashboard from './components/Admin/AdminDashboard';
 import AdminPasswordPrompt from './components/Admin/AdminPasswordPrompt';
+import DailyReportPage from "./components/DailyReportPage";
 import EmployeeManagement from './components/Admin/EmployeeManagement';
 
 
@@ -57,6 +58,7 @@ function InnerApp() {
                         <Route path="/checkout" element={isLoggedIn ? <CartPage /> : <Navigate to="/" />} />
                         <Route path="/receipt" element={isLoggedIn ? <ReceiptPage /> : <Navigate to="/" />} />
                         <Route path="/manager" element={<ManagerDashboard />} />
+                        <Route path="/report" element={<DailyReportPage />} />
                         <Route path="*" element={<p>Page not found</p>} />
 
                     </Routes>

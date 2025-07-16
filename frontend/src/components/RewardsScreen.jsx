@@ -22,10 +22,10 @@ export default function RewardsScreen() {
     };
 
     const handleSkip = () => {
-        navigate('/itemList');
-    };
+        navigate('/departments');
+    }
 
-    return (
+        return (
         <div className="card card-pos p-4 text-center">
             <h4>Rewards</h4>
             <p>Enter your phone number to enroll or continue</p>
