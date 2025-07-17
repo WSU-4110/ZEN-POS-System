@@ -1,53 +1,41 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import api from './api/api';
-import "./LoginScreen.css";
-import { useAuth } from './context/AuthContext';
+// LoginScreen.jsx
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { pinLogin } from './api/api'
+import { useAuth } from './context/AuthContext'
+import "./LoginScreen.css"
 
 export default function LoginScreen() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError]       = useState('');
-  const navigate = useNavigate();
-
-  const { login } = useAuth(); // ✅ now this works
+  const [pin, setPin]     = useState('')
+  const [error, setError] = useState('')
+  const navigate = useNavigate()
+  const { login } = useAuth()
 
   const handleSubmit = async e => {
-    e.preventDefault();
+    e.preventDefault()
     try {
-      await api.post('/login', { username, password });
-      login(username);
-      navigate('/rewards');
+      const data = await pinLogin(pin)
+      login(data.username, data.role)
+      navigate('/rewards')
     } catch {
-      setError('Invalid username or password');
+      setError('Invalid PIN')
     }
-  };
+  }
 
   return (
       <div className="login-screen">
         <div className="login-card">
-          <h3 className="text-center">ZEN POS Login</h3>
+          <h3 className="text-center">ZEN POS PIN Login</h3>
           {error && <div className="alert alert-danger">{error}</div>}
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label className="form-label">Username</label>
-              <input
-                  type="text"
-                  className="form-control"
-                  value={username}
-                  onChange={e => setUsername(e.target.value)}
-                  placeholder="Enter your username"
-                  required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="form-label">Password</label>
+              <label className="form-label">PIN</label>
               <input
                   type="password"
                   className="form-control"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  placeholder="Enter your password"
+                  value={pin}
+                  onChange={e => setPin(e.target.value)}
+                  placeholder="Enter your PIN"
                   required
               />
             </div>
@@ -57,5 +45,5 @@ export default function LoginScreen() {
           </form>
         </div>
       </div>
-  );
+  )
 }

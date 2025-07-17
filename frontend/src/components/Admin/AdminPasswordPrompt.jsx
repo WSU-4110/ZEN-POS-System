@@ -1,50 +1,41 @@
 import React from 'react';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import { pinLogin } from '../api/api';  //
 
 export default function AdminPasswordPrompt() {
   const navigate = useNavigate();
 
   const handleAdminLogin = async () => {
-    const { value: formValues } = await Swal.fire({
-      title: 'Admin Login',
-      html:
-          '<input id="swal-username" class="swal2-input" placeholder="Username">' +
-          '<input id="swal-password" type="password" class="swal2-input" placeholder="Password">',
-      focusConfirm: false,
+    const { value: pin } = await Swal.fire({
+      title: 'Admin PIN Login',
+      input: 'password',
+      inputLabel: 'Enter your admin PIN',
+      inputAttributes: {
+        maxlength: 6,
+        autocapitalize: 'off',
+        autocorrect: 'off'
+      },
       showCancelButton: true,
       confirmButtonText: 'Login',
-      preConfirm: () => {
-        const username = document.getElementById('swal-username').value;
-        const password = document.getElementById('swal-password').value;
-        if (!username || !password) {
-          Swal.showValidationMessage('Please enter both username and password');
-          return false;
-        }
-        return { username, password };
-      }
+      preConfirm: v => v || Swal.showValidationMessage('PIN is required')
     });
-
-    if (!formValues) return;
+    if (!pin) return;
 
     try {
-      const res = await fetch('http://localhost:8080/api/admin/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formValues)
-      });
-
-      const result = await res.json();
-
-      if (res.ok && result.status === 'success') {
+      const result = await pinLogin(pin);  // calls POST /api/admin/pin-login
+      if (result.status === 'success' && result.role === 'MANAGER') {
         localStorage.setItem('isAdmin', 'true');
-        Swal.fire('Success', 'Admin login successful', 'success');
+        localStorage.setItem('username', result.username);
+        localStorage.setItem('role', result.role);
+        await Swal.fire('Welcome', `Hello ${result.username}`, 'success');
         navigate('/manager');
       } else {
-        Swal.fire('Access Denied', result.error || 'Invalid credentials', 'error');
+        Swal.fire('Access Denied', result.error || 'Invalid PIN or insufficient role', 'error');
       }
     } catch (err) {
-      Swal.fire('Error', 'Unable to contact server or invalid credentials', 'error');
+      console.error(err);
+      Swal.fire('Error', 'Server unreachable or bad PIN', 'error');
     }
   };
 

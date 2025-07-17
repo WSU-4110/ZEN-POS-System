@@ -33,15 +33,24 @@ public class DataLoader implements CommandLineRunner {
 
     private void seedEmployees() {
         empRepo.findByUsername("admin").ifPresentOrElse(
-                e -> System.out.println("Admin already exists."),
-                () -> empRepo.save(new Employee("admin", "password", "MANAGER"))
+                e -> {
+                    e.setPasswordHash("1111");
+                    e.setRole("MANAGER");
+                    empRepo.save(e);
+                },
+                () -> empRepo.save(new Employee("admin","1111","MANAGER"))
         );
 
         empRepo.findByUsername("cashier").ifPresentOrElse(
-                e -> System.out.println("Cashier already exists."),
-                () -> empRepo.save(new Employee("cashier", "password", "CASHIER"))
+                e -> {
+                    e.setPasswordHash("2222");
+                    e.setRole("CASHIER");
+                    empRepo.save(e);
+                },
+                () -> empRepo.save(new Employee("cashier","2222","CASHIER"))
         );
     }
+
 
     private Map<String, Department> seedDepartments() {
         List<String> names = List.of(

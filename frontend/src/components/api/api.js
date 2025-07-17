@@ -65,4 +65,27 @@ export async function fetchDailyReport() {
   return res.data
 }
 
+// ——— PIN login ———
+export async function pinLogin(pin) {
+  const res = await api.post('/admin/pin-login', { pin })
+  return res.data
+}
+
+export async function fetchEmployees() {
+  const res = await api.get('/manager/employees')
+  return res.data
+}
+export async function createEmployee(emp) {
+  const res = await api.post('/manager/employees', emp)
+  return res.data
+}
+export async function updateEmployee(id, emp) {
+  const res = await api.put(`/manager/employees/${id}`, emp)
+  return res.data
+}
+export async function deleteEmployee(id) {
+  await api.delete(`/manager/employees/${id}`)
+}
+
+
 export default api
