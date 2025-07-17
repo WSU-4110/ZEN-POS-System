@@ -152,7 +152,7 @@ public class DataLoader implements CommandLineRunner {
 
     private void seed(String name, double price, int stock, Department dept) {
         itemRepo.findByName(name).ifPresentOrElse(
-                i -> {}, // already exists
+                i -> {},
                 () -> {
                     itemRepo.save(new Item(name, price, stock, dept));
                     System.out.println("Seeded item: " + name);

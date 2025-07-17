@@ -1,7 +1,9 @@
 package com.zenpos.controller;
 
 import com.zenpos.entity.Department;
+import com.zenpos.entity.Item;
 import com.zenpos.repository.DepartmentRepository;
+import com.zenpos.repository.ItemRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,13 +12,23 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/departments")
 public class DepartmentController {
+
     private final DepartmentRepository repo;
-    public DepartmentController(DepartmentRepository repo) {
+    private final ItemRepository itemRepo;
+
+    public DepartmentController(DepartmentRepository repo, ItemRepository itemRepo) {
         this.repo = repo;
+        this.itemRepo = itemRepo;
     }
 
     @GetMapping
     public List<Department> list() {
         return repo.findAll();
+    }
+
+    // ADD THIS ENDPOINT!
+    @GetMapping("/{id}/items")
+    public List<Item> getItemsForDepartment(@PathVariable Long id) {
+        return itemRepo.findByDepartmentId(id);
     }
 }
