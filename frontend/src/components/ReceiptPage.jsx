@@ -1,43 +1,53 @@
-import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { format } from 'date-fns'
-import { fetchReceiptByPhone, fetchLatestReceipt } from './api/api'
+import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function ReceiptPage() {
-    const { state } = useLocation()
-    const navigate  = useNavigate()
-    const phone     = state?.phoneNumber
-    const [receipt, setReceipt] = useState(null)
-
-    useEffect(() => {
-        ;(async () => {
-            try {
-                const data = phone
-                    ? await fetchReceiptByPhone(phone)
-                    : await fetchLatestReceipt()
-                setReceipt(data)
-            } catch {
-                navigate('/rewards')
-            }
-        })()
-    }, [phone, navigate])
-
-    if (!receipt) return <p>Loading receipt…</p>
+    const location = useLocation();
+    const navigate = useNavigate();
+    const phone = location.state?.phoneNumber || '';
+    const cart = location.state?.cart || [];
+    const subtotal = location.state?.subtotal || 0;
+    const discount = location.state?.discount ?? parseFloat(localStorage.getItem('discount') || '0');
+    const total = location.state?.totalAmount ?? 0;
 
     return (
-        <div>
-            <h2>Receipt #{receipt.id}</h2>
-            <p>Date: {format(new Date(receipt.createdAt), 'MMM d, yyyy hh:mm a')}</p>
-            {phone && <p>Phone: {phone}</p>}
-            <ul>
-                {receipt.items.map(i => (
-                    <li key={i.id}>{i.name} × {i.quantity} — ${i.price.toFixed(2)}</li>
+        <div className="card card-pos p-4 text-center">
+            <h4>Receipt</h4>
+            {phone ? (
+                <p>Rewards phone: {phone}</p>
+            ) : (
+                <p>No rewards phone entered.</p>
+            )}
+
+            <ul className="list-group mb-3">
+                {cart.map((item, idx) => (
+                    <li key={idx} className="list-group-item d-flex justify-content-between align-items-center">
+                        <div><strong>{item.name}</strong> × {item.quantity}</div>
+                        <span>${(item.price * item.quantity).toFixed(2)}</span>
+                    </li>
                 ))}
             </ul>
-            <h3>Total: ${receipt.total.toFixed(2)}</h3>
-            <button onClick={() => navigate('/rewards')}>
-                Continue Shopping
+
+            <div className="d-flex justify-content-between mb-2">
+                <strong>Subtotal:</strong>
+                <span>${subtotal.toFixed(2)}</span>
+            </div>
+            <div className="d-flex justify-content-between mb-2">
+                <strong>Rewards Discount:</strong>
+                <span>-${discount.toFixed(2)}</span>
+            </div>
+            <div className="d-flex justify-content-between mb-4">
+                <strong>Total:</strong>
+                <span>${total.toFixed(2)}</span>
+            </div>
+
+            <button
+                className="btn btn-primary w-100 mt-3"
+                onClick={() => navigate('/rewards')}
+            >
+                Continue
             </button>
         </div>
-    )
+    );
 }
+

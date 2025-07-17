@@ -1,58 +1,68 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { fetchCart, deleteCartItem, postTransaction } from '../api/api'
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { fetchCart, deleteCartItem, postTransaction } from '../api/api';
 
 export default function CartPage() {
-  const [entries, setEntries] = useState([])
-  const [loading, setLoading] = useState(true)
-  const navigate = useNavigate()
-  const user = localStorage.getItem('user') || 'guest'
-  const phone = localStorage.getItem('phoneNumber')
+  const [entries, setEntries] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const user = localStorage.getItem('user') || 'guest';
+  const phone = localStorage.getItem('phoneNumber') || '';
+  const discount = parseFloat(localStorage.getItem('discount') || '0');
 
   const loadCart = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
-      const data = await fetchCart(user)
-      setEntries(data)
+      const data = await fetchCart(user);
+      setEntries(data);
     } catch {
-      setEntries([])
+      setEntries([]);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    loadCart()
-  }, [])
+    loadCart();
+  }, []);
 
   const handleRemove = async idx => {
-    await deleteCartItem(user, idx)
-    await loadCart()
-  }
+    await deleteCartItem(user, idx);
+    await loadCart();
+  };
 
-  const subtotal = entries.reduce((sum, e) => sum + e.price * e.quantity, 0)
+  const subtotal = entries.reduce((sum, e) => sum + e.price * e.quantity, 0);
+  const finalTotal = Math.max(0, subtotal - discount);
 
   const handlePlaceOrder = async () => {
-    if (!entries.length) return
+    if (!entries.length) return;
     await postTransaction({
-      totalAmount:   subtotal,
-      employee:      user,
-      status:        'completed',
+      totalAmount: finalTotal,
+      employee: user,
+      status: 'completed',
       paymentMethod: 'Cash',
-      promotional:   false,
-      items:         entries.map(e => ({
+      promotional: discount > 0,
+      items: entries.map(e => ({
         itemName: e.name,
         quantity: e.quantity,
-        price:    e.price
+        price: e.price
       }))
-    })
+    });
     for (let i = entries.length - 1; i >= 0; i--) {
-      await deleteCartItem(user, i)
+      await deleteCartItem(user, i);
     }
-    navigate ('/receipts', { state: { phoneNumber: phone } })
-  }
+    navigate('/receipts', {
+      state: {
+        phoneNumber: phone,
+        cart: entries,
+        totalAmount: finalTotal,
+        discount,
+        subtotal
+      }
+    });
+  };
 
-  if (loading) return <p>Loading cart…</p>
+  if (loading) return <p>Loading cart…</p>;
 
   return (
       <div className="row">
@@ -76,12 +86,20 @@ export default function CartPage() {
                     ))}
                   </ul>
               )}
-          <div className="d-flex justify-content-between mb-4">
+          <div className="d-flex justify-content-between mb-2">
             <strong>Subtotal:</strong>
-            <strong>${subtotal.toFixed(2)}</strong>
+            <span>${subtotal.toFixed(2)}</span>
+          </div>
+          <div className="d-flex justify-content-between mb-2">
+            <strong>Rewards Discount:</strong>
+            <span>-${discount.toFixed(2)}</span>
+          </div>
+          <div className="d-flex justify-content-between mb-4">
+            <strong>Total:</strong>
+            <span>${finalTotal.toFixed(2)}</span>
           </div>
           <button className="btn btn-success" onClick={handlePlaceOrder} disabled={!entries.length}>Place Order</button>
         </div>
       </div>
-  )
+  );
 }

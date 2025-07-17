@@ -15,6 +15,9 @@ public class TransactionMapper {
         tx.setStatus(d.status);
         tx.setPaymentMethod(d.paymentMethod);
         tx.setTimestamp(d.timestamp != null ? d.timestamp : LocalDateTime.now());
+        tx.setPromotional(d.promotional);
+        tx.setPhoneNumber(d.phoneNumber);
+        tx.setDiscount(d.discount);
         tx.setItems(d.items.stream().map(i -> {
             TransactionItem ti = new TransactionItem();
             ti.setItemName(i.itemName);
@@ -34,6 +37,9 @@ public class TransactionMapper {
         d.status        = tx.getStatus();
         d.paymentMethod = tx.getPaymentMethod();
         d.timestamp     = tx.getTimestamp();
+        d.promotional   = tx.isPromotional();
+        d.phoneNumber   = tx.getPhoneNumber();
+        d.discount      = tx.getDiscount();
         d.items         = tx.getItems().stream().map(i -> {
             TransactionItemDto ti = new TransactionItemDto();
             ti.itemName = i.getItemName();
@@ -44,3 +50,4 @@ public class TransactionMapper {
         return d;
     }
 }
+

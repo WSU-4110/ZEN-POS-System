@@ -13,16 +13,19 @@ public class Transaction {
 
     private double totalAmount;
     private String employee;
-    private String status;         // e.g. "completed", "refunded"
-    private String paymentMethod;  // e.g. "Cash", "Credit Card"
-
+    private String status;
+    private String paymentMethod;
     private LocalDateTime timestamp = LocalDateTime.now();
+    private boolean promotional;
+    private String phoneNumber;
+
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private int discount = 0;
+
 
     @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<TransactionItem> items;
-    private boolean promotional;
-
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -47,5 +50,10 @@ public class Transaction {
 
     public List<TransactionItem> getItems() { return items; }
     public void setItems(List<TransactionItem> items) { this.items = items; }
-}
 
+    public String getPhoneNumber() { return phoneNumber; }
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+
+    public int getDiscount() { return discount; }
+    public void setDiscount(int discount) { this.discount = discount; }
+}
