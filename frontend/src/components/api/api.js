@@ -1,7 +1,61 @@
-import axios from 'axios';
+import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'http://localhost:8080/api',
-});
+  baseURL: 'http://localhost:8080/api'
+})
 
-export default api;
+export async function fetchCart(user) {
+  const res = await api.get('/cart', { params: { user } })
+  return res.data
+}
+
+export async function deleteCartItem(user, index) {
+  const res = await api.delete('/cart', { params: { user, index } })
+  return res.data
+}
+
+export async function fetchTransactions() {
+  const res = await api.get('/transactions')
+  return res.data
+}
+
+export async function postTransaction(transaction) {
+  const res = await api.post('/transactions', transaction)
+  return res.data
+}
+
+export async function fetchReceiptByPhone(phoneNumber) {
+  const res = await api.get('/orders/latest', { params: { phone: phoneNumber } })
+  return res.data
+}
+
+export async function fetchLatestReceipt() {
+  const res = await api.get('/orders/latest')
+  return res.data
+}
+
+export async function fetchInventory() {
+  const res = await api.get('/inventory')
+  return res.data
+}
+
+export async function fetchDepartments() {
+  const res = await api.get('/departments')
+  return res.data
+}
+
+export async function createInventory(payload) {
+  const res = await api.post('/inventory', payload)
+  return res.data
+}
+
+export async function updateInventory(id, payload) {
+  const res = await api.put(`/inventory/${id}`, payload)
+  return res.data
+}
+
+export async function deleteInventory(id) {
+  await api.delete(`/inventory/${id}`)
+}
+
+export default api

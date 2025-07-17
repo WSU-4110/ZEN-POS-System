@@ -11,7 +11,7 @@ export default function EmployeeManagement({ onBack }) {
     ]);
     const [searchTerm, setSearchTerm] = useState('');
 
-    // Filter employees based on search term
+
     const filteredEmployees = employees.filter(employee =>
         employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         employee.position.toLowerCase().includes(searchTerm.toLowerCase()) ||

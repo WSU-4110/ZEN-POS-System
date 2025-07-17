@@ -15,7 +15,7 @@ import RewardsScreen from './components/RewardsScreen';
 import LoginScreen from './components/LoginScreen';
 import ManagerDashboard from './components/Admin/AdminDashboard';
 import AdminPasswordPrompt from './components/Admin/AdminPasswordPrompt';
-import EmployeeManagement from './components/Admin/EmployeeManagement';
+import DailyReportPage from "./components/DailyReportPage";
 
 
 
@@ -51,14 +51,33 @@ function InnerApp() {
                     <Routes>
                         <Route path="/" element={<LoginScreen />} />
                         <Route path="/login" element={<LoginScreen />} />
-                        <Route path="/rewards" element={isLoggedIn ? <RewardsScreen /> : <Navigate to="/" />} />
-                        <Route path="/departments" element={isLoggedIn ? <DepartmentList /> : <Navigate to="/" />} />
-                        <Route path="/departments/:id/items" element={isLoggedIn ? <ItemList /> : <Navigate to="/" />} />
-                        <Route path="/checkout" element={isLoggedIn ? <CartPage /> : <Navigate to="/" />} />
-                        <Route path="/receipt" element={isLoggedIn ? <ReceiptPage /> : <Navigate to="/" />} />
-                        <Route path="/manager" element={<ManagerDashboard />} />
-                        <Route path="*" element={<p>Page not found</p>} />
 
+                        <Route
+                            path="/rewards"
+                            element={isLoggedIn ? <RewardsScreen /> : <Navigate to="/" />}
+                        />
+                        <Route
+                            path="/departments"
+                            element={isLoggedIn ? <DepartmentList /> : <Navigate to="/" />}
+                        />
+                        <Route
+                            path="/departments/:id/items"
+                            element={isLoggedIn ? <ItemList /> : <Navigate to="/" />}
+                        />
+
+                        <Route
+                            path="/checkout"
+                            element={isLoggedIn ? <CartPage /> : <Navigate to="/" />}
+                        />
+
+                        <Route
+                            path="/receipts"
+                            element={isLoggedIn ? <ReceiptPage /> : <Navigate to="/" />}
+                        />
+
+                        <Route path="/manager" element={<ManagerDashboard />} />
+                        <Route path="/report" element={<DailyReportPage />} />
+                        <Route path="*" element={<p>Page not found</p>} />
                     </Routes>
                 </main>
 

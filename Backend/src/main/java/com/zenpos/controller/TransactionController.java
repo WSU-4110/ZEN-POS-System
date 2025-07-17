@@ -2,7 +2,6 @@ package com.zenpos.controller;
 
 import com.zenpos.entity.Transaction;
 import com.zenpos.repository.TransactionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,16 +11,20 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 public class TransactionController {
 
-    @Autowired
-    private TransactionRepository transactionRepository;
+    private final TransactionRepository repo;
+
+    public TransactionController(TransactionRepository repo) {
+        this.repo = repo;
+    }
 
     @PostMapping
-    public Transaction saveTransaction(@RequestBody Transaction transaction) {
-        return transactionRepository.save(transaction);
+    public Transaction saveTransaction(@RequestBody Transaction tx) {
+        return repo.save(tx);
     }
 
     @GetMapping
     public List<Transaction> getAllTransactions() {
-        return transactionRepository.findAll();
+        return repo.findAll();
     }
 }
+
