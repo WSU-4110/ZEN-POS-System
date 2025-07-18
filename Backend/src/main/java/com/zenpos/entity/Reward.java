@@ -16,28 +16,15 @@ public class Reward {
     @Column(name = "enrolled_at", nullable = false, updatable = false)
     private Instant enrolledAt = Instant.now();
 
-    public Reward() {}
+    @Column(name = "points")
+    private int points = 0;
 
-    public Reward(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-    public Instant getEnrolledAt() {
-        return enrolledAt;
-    }
-    public void setEnrolledAt(Instant enrolledAt) {
-        this.enrolledAt = enrolledAt;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getPhoneNumber() { return phoneNumber; }
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+    public Instant getEnrolledAt() { return enrolledAt; }
+    public void setEnrolledAt(Instant enrolledAt) { this.enrolledAt = enrolledAt; }
+    public int getPoints() { return points; }
+    public void setPoints(int points) { this.points = points; }
 }

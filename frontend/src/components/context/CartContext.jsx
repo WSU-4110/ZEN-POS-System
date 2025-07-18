@@ -1,63 +1,41 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import api from '../api/api';
+import React, { createContext, useContext, useState } from 'react';
+import { postTransaction } from './components/api/api';
 
 const CartContext = createContext();
 
+export function useCart() {
+  return useContext(CartContext);
+}
+
 export function CartProvider({ children }) {
-  const [items, setItems] = useState([]);
-  const [total, setTotal] = useState(0);
+  const [cart, setCart] = useState([]);
 
-  const user = localStorage.getItem('user') || 'guest';
-
-  const loadCart = async () => {
-    try {
-      const { data } = await api.get(`/cart?user=${user}`);
-      setItems(data);
-    } catch (e) {
-      setItems([]);
-    }
-  };
-
-  useEffect(() => { loadCart(); }, []);
-
-  useEffect(() => {
-    setTotal(items.reduce((sum, it) => sum + it.price * it.quantity, 0));
-  }, [items]);
-
-  const addItem = async itemId => {
-    await api.post(`/cart/add?user=${user}&itemId=${itemId}`);
-    await loadCart();
-  };
-
-  const addCustom = async payload => {
-    await api.post(`/cart/addCustom?user=${user}`, payload);
-    await loadCart();
-  };
-
-  const removeItem = async idx => {
-    await api.delete(`/cart?user=${user}&index=${idx}`);
-    await loadCart();
-  };
-
-  const clearCart = async () => {
-    await api.delete(`/cart/clear?user=${user}`);
-    await loadCart();
-  };
-
-  const checkout = async () => {
-    await api.post(`/order?user=${user}`);
-    await clearCart();
+  const checkoutCart = async ({ employee, phoneNumber }) => {
+    if (cart.length === 0) return;
+    const subtotal = cart.reduce((sum, e) => sum + e.price * e.quantity, 0);
+    await postTransaction({
+      totalAmount: subtotal,
+      employee,
+      status: 'completed',
+      paymentMethod: 'Cash',
+      promotional: false,
+      items: cart.map(e => ({
+        itemName: e.name,
+        quantity: e.quantity,
+        price: e.price,
+      })),
+      phoneNumber: phoneNumber || null
+    });
+    setCart([]);
   };
 
   return (
       <CartContext.Provider value={{
-        items, total,
-        addItem, addCustom, removeItem,
-        clearCart, checkout
+        cart,
+        setCart,
+        checkoutCart,
       }}>
         {children}
       </CartContext.Provider>
   );
 }
-
-export const useCart = () => useContext(CartContext);

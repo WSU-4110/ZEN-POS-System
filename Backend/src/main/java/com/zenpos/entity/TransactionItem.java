@@ -1,4 +1,3 @@
-// src/main/java/com/zenpos/entity/TransactionItem.java
 package com.zenpos.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -19,7 +18,6 @@ public class TransactionItem {
     @JsonBackReference
     private Transaction transaction;
 
-
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -35,3 +33,4 @@ public class TransactionItem {
     public Transaction getTransaction() { return transaction; }
     public void setTransaction(Transaction transaction) { this.transaction = transaction; }
 }
+

@@ -71,7 +71,7 @@ a { text-decoration: none; }
   margin: 0 5px;
 }
 
-/* SweetAlert Custom Styles */
+
 .swal2-popup {
   border-radius: 10px !important;
   padding: 2rem !important;
@@ -128,7 +128,7 @@ a { text-decoration: none; }
   transform: translateY(-1px) !important;
 }
 
-/* Special styles for admin password prompt */
+
 .admin-password-popup .swal2-input {
   letter-spacing: 0.2em;
   font-family: monospace;

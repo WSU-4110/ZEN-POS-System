@@ -11,4 +11,7 @@ public class TransactionDto {
     public String paymentMethod;
     public LocalDateTime timestamp;
     public List<TransactionItemDto> items;
+    public String phoneNumber;
+    public int discount;
+    public boolean promotional;
 }

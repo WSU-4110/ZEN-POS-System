@@ -1,9 +1,8 @@
 package com.zenpos.controller;
 
-import com.zenpos.entity.Transaction;
-import com.zenpos.repository.TransactionRepository;
+import com.zenpos.dto.TransactionDto;
+import com.zenpos.service.TransactionService;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -11,20 +10,19 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 public class TransactionController {
 
-    private final TransactionRepository repo;
+    private final TransactionService service;
 
-    public TransactionController(TransactionRepository repo) {
-        this.repo = repo;
+    public TransactionController(TransactionService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public Transaction saveTransaction(@RequestBody Transaction tx) {
-        return repo.save(tx);
+    public TransactionDto saveTransaction(@RequestBody TransactionDto dto) {
+        return service.create(dto);
     }
 
     @GetMapping
-    public List<Transaction> getAllTransactions() {
-        return repo.findAll();
+    public List<TransactionDto> getAllTransactions() {
+        return service.list();
     }
 }
-

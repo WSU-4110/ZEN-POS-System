@@ -12,7 +12,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/departments")
 public class DepartmentController {
-
     private final DepartmentRepository repo;
     private final ItemRepository itemRepo;
 
@@ -26,9 +25,8 @@ public class DepartmentController {
         return repo.findAll();
     }
 
-    // ADD THIS ENDPOINT!
     @GetMapping("/{id}/items")
-    public List<Item> getItemsForDepartment(@PathVariable Long id) {
+    public List<Item> getItemsByDepartment(@PathVariable Long id) {
         return itemRepo.findByDepartmentId(id);
     }
 }

@@ -3,6 +3,7 @@ package com.zenpos.controller;
 import com.zenpos.entity.*;
 import com.zenpos.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -12,15 +13,36 @@ import java.util.*;
 @CrossOrigin(origins = "http://localhost:3000")
 public class ManagerController {
     @Autowired private EmployeeRepository empRepo;
-    @Autowired private DepartmentRepository deptRepo;
 
     @GetMapping("/employees")
-    public List<Employee> getEmployees() {
+    public List<Employee> getAll() {
         return empRepo.findAll();
     }
 
-    @PostMapping("/departments")
-    public Department addDepartment(@RequestBody Department dept) {
-        return deptRepo.save(dept);
+    @PostMapping("/employees")
+    public Employee create(@RequestBody Employee e) {
+        return empRepo.save(e);
+    }
+
+    @PutMapping("/employees/{id}")
+    public ResponseEntity<Employee> update(
+            @PathVariable Long id,
+            @RequestBody Employee data
+    ) {
+        return empRepo.findById(id)
+                .map(e -> {
+                    e.setUsername(data.getUsername());
+                    e.setRole(data.getRole());
+                    e.setPasswordHash(data.getPasswordHash());
+                    return ResponseEntity.ok(empRepo.save(e));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/employees/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        if (!empRepo.existsById(id)) return ResponseEntity.notFound().build();
+        empRepo.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }

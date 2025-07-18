@@ -3,6 +3,6 @@
     "date-fns": "^4.1.0",
     "react-bootstrap": "^2.10.10",
     "sweetalert": "^2.1.2",
-    "sweetalert2": "^11.22.1"
+    "sweetalert2": "^11.22.2"
   }
 }

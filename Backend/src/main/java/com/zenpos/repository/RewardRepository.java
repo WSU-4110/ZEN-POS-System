@@ -5,5 +5,5 @@ import com.zenpos.entity.Reward;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RewardRepository extends JpaRepository<Reward, Long> {
-    Remapper findByPhoneNumber(String phoneNumber);
+    Reward findByPhoneNumber(String phoneNumber);
 }

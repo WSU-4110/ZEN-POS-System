@@ -25,12 +25,8 @@ export async function postTransaction(transaction) {
 }
 
 export async function fetchReceiptByPhone(phoneNumber) {
-  const res = await api.get('/orders/latest', { params: { phone: phoneNumber } })
-  return res.data
-}
-
-export async function fetchLatestReceipt() {
-  const res = await api.get('/orders/latest')
+  // Adjust to match backend endpoint if you only have /transactions!
+  const res = await api.get('/transactions', { params: { phoneNumber } })
   return res.data
 }
 
@@ -57,5 +53,39 @@ export async function updateInventory(id, payload) {
 export async function deleteInventory(id) {
   await api.delete(`/inventory/${id}`)
 }
+
+export async function applyRewards(phoneNumber) {
+  const res = await api.post("/rewards/enroll", { phoneNumber });
+  return res.data.discount || 0;
+}
+
+
+export async function fetchDailyReport() {
+  const res = await api.get('/reports/daily')
+  return res.data
+}
+
+// ——— PIN login ———
+export async function pinLogin(pin) {
+  const res = await api.post('/admin/pin-login', { pin })
+  return res.data
+}
+
+export async function fetchEmployees() {
+  const res = await api.get('/manager/employees')
+  return res.data
+}
+export async function createEmployee(emp) {
+  const res = await api.post('/manager/employees', emp)
+  return res.data
+}
+export async function updateEmployee(id, emp) {
+  const res = await api.put(`/manager/employees/${id}`, emp)
+  return res.data
+}
+export async function deleteEmployee(id) {
+  await api.delete(`/manager/employees/${id}`)
+}
+
 
 export default api
