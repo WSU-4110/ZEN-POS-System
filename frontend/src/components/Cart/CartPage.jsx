@@ -67,7 +67,10 @@ export default function CartPage() {
   return (
       <div className="row">
         <div className="col-12 mb-3">
-          <button className="btn btn-secondary" onClick={() => navigate(-1)}>← Back</button>
+          <button className="btn btn-secondary me-2" onClick={() => navigate(-1)}>← Back</button>
+          <button className="btn btn-primary" onClick={() => navigate('/custom-burger')}>
+            Custom Order
+          </button>
         </div>
         <div className="col-md-8">
           <h2>Your Cart</h2>
