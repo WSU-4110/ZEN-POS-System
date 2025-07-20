@@ -11,13 +11,16 @@
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.3",
     "react-scripts": "^5.0.1",
-    "sweetalert2": "^11.22.2"
+    "sweetalert2": "^11.22.2",
+    "sweetalert": "^2.1.2",
+    "date-fns": "^2.30.0"
   },
   "scripts": {
     "start": "kill-port 3000 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "clean": "rm -rf node_modules build package-lock.json"
   },
   "browserslist": {
     "production": [
