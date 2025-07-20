@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import LogoutButton from './components/LogoutButton';
 
-import { CartProvider } from './CartContext';
+import { CartProvider } from './components/context/CartContext';
 import { AuthProvider, useAuth } from './components/context/AuthContext';
 import ReceiptPage from './components/ReceiptPage';
 
@@ -16,8 +16,7 @@ import LoginScreen from './components/LoginScreen';
 import ManagerDashboard from './components/Admin/AdminDashboard';
 import AdminPasswordPrompt from './components/Admin/AdminPasswordPrompt';
 import DailyReportPage from "./components/DailyReportPage";
-
-
+import BurgerCustomizer from './components/BurgerCustomizer';
 
 function InnerApp() {
     const { user } = useAuth();
@@ -51,7 +50,6 @@ function InnerApp() {
                     <Routes>
                         <Route path="/" element={<LoginScreen />} />
                         <Route path="/login" element={<LoginScreen />} />
-
                         <Route
                             path="/rewards"
                             element={isLoggedIn ? <RewardsScreen /> : <Navigate to="/" />}
@@ -64,17 +62,18 @@ function InnerApp() {
                             path="/departments/:id/items"
                             element={isLoggedIn ? <ItemList /> : <Navigate to="/" />}
                         />
-
                         <Route
                             path="/checkout"
                             element={isLoggedIn ? <CartPage /> : <Navigate to="/" />}
                         />
-
+                        <Route
+                            path="/custom-burger"
+                            element={isLoggedIn ? <BurgerCustomizer /> : <Navigate to="/" />}
+                        />
                         <Route
                             path="/receipts"
                             element={isLoggedIn ? <ReceiptPage /> : <Navigate to="/" />}
                         />
-
                         <Route path="/manager" element={<ManagerDashboard />} />
                         <Route path="/report" element={<DailyReportPage />} />
                         <Route path="*" element={<p>Page not found</p>} />
@@ -95,6 +94,5 @@ export default function App() {
             <InnerApp />
         </AuthProvider>
     );
-
 }
 

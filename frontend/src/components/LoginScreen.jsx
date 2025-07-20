@@ -1,4 +1,3 @@
-// LoginScreen.jsx
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { pinLogin } from './api/api'

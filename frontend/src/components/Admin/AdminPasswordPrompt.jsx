@@ -1,7 +1,7 @@
 import React from 'react';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
-import { pinLogin } from '../api/api';  //
+import { pinLogin } from '../api/api';
 
 export default function AdminPasswordPrompt() {
   const navigate = useNavigate();
