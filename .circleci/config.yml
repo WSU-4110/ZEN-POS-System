@@ -3,14 +3,14 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: cimg/maven:3.9.6-jdk-17.0
+      - image: circleci/maven:3.9.6-jdk-17
     steps:
       - checkout
       - run:
           name: Verify Maven Installed
           command: mvn -v
       - run:
-          name: Build and Test from Backend Folder
+          name: Build and Test from Backend
           command: |
             cd Backend
             mvn clean verify
