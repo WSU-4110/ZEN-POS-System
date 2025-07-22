@@ -22,7 +22,7 @@ A modern, full-stack Point of Sale system designed to be light-weight, simple an
 ### Prerequisites
 - Node.js v16+
 - Java JDK 17
-- PostgreSQL 14+
+- PostgreSQL 16+
 - Maven 3.8+
 
 ### Frontend Setup
