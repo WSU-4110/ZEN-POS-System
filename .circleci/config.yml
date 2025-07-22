@@ -3,16 +3,11 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: cimg/openjdk:17.0
+      - image: cimg/openjdk:17.0-maven
     steps:
       - checkout
       - run:
-          name: Install Maven
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y maven
-      - run:
-          name: Build and Run Unit Tests
+          name: Build and Test with Maven
           command: mvn clean verify
 
 workflows:
