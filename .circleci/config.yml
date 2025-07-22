@@ -7,8 +7,13 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Build and Test with Maven
-          command: mvn clean verify
+          name: Verify Maven Installed
+          command: mvn -v
+      - run:
+          name: Build and Run Tests from Backend Folder
+          command: |
+            cd Backend
+            mvn clean verify
 
 workflows:
   version: 2
