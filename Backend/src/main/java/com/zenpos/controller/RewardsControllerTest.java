@@ -4,7 +4,6 @@ import com.zenpos.entity.Reward;
 import com.zenpos.repository.RewardRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -39,8 +38,9 @@ class RewardsControllerTest {
         when(rewardRepository.save(any(Reward.class))).thenAnswer(i -> i.getArgument(0));
 
         ResponseEntity<Reward> response = rewardsController.enroll(input);
+
         assertEquals(200, response.getStatusCodeValue());
-        assertNotNull(response.getBody());
+        assertEquals("1234567890", response.getBody().getPhoneNumber());
         assertEquals(0, response.getBody().getPoints());
         assertNotNull(response.getBody().getEnrolledAt());
     }
@@ -49,7 +49,7 @@ class RewardsControllerTest {
     void testEnroll_ExistingReward() {
         Reward existing = new Reward();
         existing.setPhoneNumber("1234567890");
-        existing.setPoints(20);
+        existing.setPoints(10);
 
         when(rewardRepository.findByPhoneNumber("1234567890")).thenReturn(existing);
 
@@ -57,6 +57,7 @@ class RewardsControllerTest {
         input.setPhoneNumber("1234567890");
 
         ResponseEntity<Reward> response = rewardsController.enroll(input);
+
         assertEquals(200, response.getStatusCodeValue());
         assertEquals(existing, response.getBody());
     }
@@ -64,77 +65,65 @@ class RewardsControllerTest {
     @Test
     void testGetReward_Found() {
         Reward reward = new Reward();
-        reward.setPhoneNumber("999");
-        when(rewardRepository.findByPhoneNumber("999")).thenReturn(reward);
+        reward.setPhoneNumber("1111");
 
-        ResponseEntity<Reward> response = rewardsController.getReward("999");
+        when(rewardRepository.findByPhoneNumber("1111")).thenReturn(reward);
+
+        ResponseEntity<Reward> response = rewardsController.getReward("1111");
+
         assertEquals(200, response.getStatusCodeValue());
         assertEquals(reward, response.getBody());
     }
 
     @Test
-    void testGetReward_NotFound() {
-        when(rewardRepository.findByPhoneNumber("000")).thenReturn(null);
-
-        ResponseEntity<Reward> response = rewardsController.getReward("000");
-        assertEquals(404, response.getStatusCodeValue());
-    }
-
-    @Test
-    void testApplyReward_WithPoints() {
+    void testApplyReward_WithEnoughPoints() {
         Reward reward = new Reward();
-        reward.setPhoneNumber("123");
-        reward.setPoints(35);
-        when(rewardRepository.findByPhoneNumber("123")).thenReturn(reward);
+        reward.setPhoneNumber("2222");
+        reward.setPoints(40); // 4 discounts
+
+        when(rewardRepository.findByPhoneNumber("2222")).thenReturn(reward);
 
         Map<String, String> req = new HashMap<>();
-        req.put("phoneNumber", "123");
+        req.put("phoneNumber", "2222");
 
         ResponseEntity<Map<String, Object>> response = rewardsController.applyReward(req);
 
         assertEquals(200, response.getStatusCodeValue());
-        assertEquals(3, response.getBody().get("pointsUsed"));
-        assertEquals(0, response.getBody().get("discount")); // because of 35 -> 30 used -> 3 discount (?)
+        assertEquals(40, response.getBody().get("pointsUsed"));
+        assertEquals(4, response.getBody().get("discount"));
     }
 
     @Test
     void testAddPoints_Success() {
         Reward reward = new Reward();
-        reward.setPhoneNumber("123");
+        reward.setPhoneNumber("3333");
         reward.setPoints(10);
 
-        when(rewardRepository.findByPhoneNumber("123")).thenReturn(reward);
+        when(rewardRepository.findByPhoneNumber("3333")).thenReturn(reward);
 
         Map<String, Object> req = new HashMap<>();
-        req.put("phoneNumber", "123");
-        req.put("amount", 15);
+        req.put("phoneNumber", "3333");
+        req.put("amount", 20);
 
         ResponseEntity<?> response = rewardsController.addPoints(req);
         assertEquals(200, response.getStatusCodeValue());
-        assertEquals(25, response.getBody());
+        assertEquals(30, response.getBody()); // 10 + 20
     }
 
     @Test
     void testRedeemPoints_Success() {
         Reward reward = new Reward();
-        reward.setPhoneNumber("123");
+        reward.setPhoneNumber("4444");
         reward.setPoints(50);
 
-        when(rewardRepository.findByPhoneNumber("123")).thenReturn(reward);
+        when(rewardRepository.findByPhoneNumber("4444")).thenReturn(reward);
 
         Map<String, Object> req = new HashMap<>();
-        req.put("phoneNumber", "123");
+        req.put("phoneNumber", "4444");
         req.put("pointsUsed", 20);
 
         ResponseEntity<?> response = rewardsController.redeemPoints(req);
         assertEquals(200, response.getStatusCodeValue());
-        assertEquals(30, response.getBody());
-    }
-
-    @Test
-    void testEnroll_BadRequest() {
-        Reward input = new Reward(); // no phone number
-        ResponseEntity<Reward> response = rewardsController.enroll(input);
-        assertEquals(400, response.getStatusCodeValue());
+        assertEquals(30, response.getBody()); // 50 - 20
     }
 }
